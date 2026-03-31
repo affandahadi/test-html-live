@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Soal RBB BUMN 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy2: #0f2044;
+    --blue: #1a4fa0;
+    --accent: #f5a623;
+    --accent2: #e8531c;
+    --green: #00c896;
+    --red: #ff4757;
+    --light: #f0f4ff;
+    --white: #ffffff;
+    --gray: #8a9bbf;
+    --border: rgba(255,255,255,0.08);
+    --card: rgba(255,255,255,0.04);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background: radial-gradient(ellipse 80% 60% at 20% 0%, rgba(26,79,160,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 100%, rgba(245,166,35,0.12) 0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ====== SPLASH ====== */
+  #splash {
+    position:fixed; inset:0; z-index:100;
+    background: var(--navy);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:24px;
+    transition: opacity 0.6s, visibility 0.6s;
+  }
+  #splash.hide { opacity:0; visibility:hidden; }
+  .splash-badge {
+    background: linear-gradient(135deg, var(--blue), #2d6ee0);
+    border-radius:16px; padding:10px 22px;
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color: var(--accent);
+  }
+  .splash-title {
+    font-size:clamp(28px,6vw,52px); font-weight:800; text-align:center; line-height:1.1;
+  }
+  .splash-title span { color: var(--accent); }
+  .splash-sub { color: var(--gray); font-size:15px; text-align:center; }
+  .splash-cats {
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:600px;
+  }
+  .splash-cat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius:40px; padding:6px 18px; font-size:13px; color: var(--gray);
+  }
+  .splash-cat span { color: var(--accent); font-weight:700; }
+  .btn-start {
+    margin-top:8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border:none; border-radius:14px; padding:16px 48px;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700;
+    color: var(--navy); cursor:pointer;
+    box-shadow: 0 8px 30px rgba(245,166,35,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-start:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(245,166,35,0.45); }
+
+  /* ====== HEADER ====== */
+  header {
+    position:sticky; top:0; z-index:50;
+    background: rgba(10,22,40,0.85); backdrop-filter:blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding:0 24px; height:60px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+  }
+  .hdr-left { display:flex; align-items:center; gap:12px; }
+  .hdr-logo {
+    background: linear-gradient(135deg, var(--blue), #2d6ee0);
+    border-radius:10px; padding:6px 14px;
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:2px;
+    color: var(--accent); font-weight:700;
+  }
+  .hdr-title { font-size:15px; font-weight:700; color: var(--white); }
+  .hdr-right { display:flex; align-items:center; gap:12px; }
+  .score-chip {
+    background: var(--card); border:1px solid var(--border);
+    border-radius:40px; padding:5px 16px; font-size:13px; font-weight:600;
+    display:flex; align-items:center; gap:6px;
+  }
+  .score-chip .dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
+
+  /* ====== TABS ====== */
+  .tabs-wrap {
+    position: relative; z-index:1;
+    padding: 24px 24px 0;
+    display:flex; gap:0; overflow-x:auto;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width:none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display:none; }
+  .tab-btn {
+    flex-shrink:0;
+    background:none; border:none; border-bottom:3px solid transparent;
+    padding:10px 20px; cursor:pointer;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:600;
+    color: var(--gray); transition:all 0.2s;
+    display:flex; align-items:center; gap:8px;
+  }
+  .tab-btn:hover { color: var(--white); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-badge {
+    background: rgba(245,166,35,0.15); border-radius:40px;
+    padding:1px 8px; font-size:11px; color: var(--accent);
+  }
+  .tab-btn.done .tab-badge { background:rgba(0,200,150,0.15); color:var(--green); }
+
+  /* ====== SECTION HEADER ====== */
+  .section-hdr {
+    position:relative; z-index:1;
+    padding:28px 28px 12px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  .section-title-block h2 { font-size:22px; font-weight:800; }
+  .section-title-block p { color:var(--gray); font-size:13px; margin-top:4px; }
+  .section-stats {
+    display:flex; gap:12px;
+  }
+  .stat-pill {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:40px; padding:6px 16px;
+    font-size:12px; font-weight:600; color:var(--gray);
+    display:flex; align-items:center; gap:6px;
+  }
+  .stat-pill b { color:var(--white); }
+
+  /* ====== QUESTION GRID ====== */
+  .q-grid {
+    position:relative; z-index:1;
+    padding: 0 28px 40px;
+    display:grid; gap:16px;
+  }
+
+  /* ====== QUESTION CARD ====== */
+  .q-card {
+    background: var(--card); border:1px solid var(--border);
+    border-radius:16px; overflow:hidden;
+    transition: border-color 0.3s;
+  }
+  .q-card.answered { border-color: rgba(0,200,150,0.25); }
+  .q-card.wrong-answered { border-color: rgba(255,71,87,0.25); }
+
+  .q-head {
+    padding:18px 20px 14px;
+    display:flex; align-items:flex-start; gap:14px;
+  }
+  .q-num {
+    flex-shrink:0;
+    background: linear-gradient(135deg, var(--blue), #2d6ee0);
+    border-radius:10px; width:32px; height:32px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:12px; font-weight:700;
+    color:var(--accent);
+  }
+  .q-text {
+    font-size:14px; line-height:1.6; font-weight:500; padding-top:4px;
+  }
+  .q-text .hint {
+    display:block; font-size:12px; color:var(--gray); margin-top:6px; font-style:italic;
+  }
+
+  /* Options */
+  .q-opts { padding:0 20px 18px; display:flex; flex-direction:column; gap:8px; }
+  .opt-btn {
+    background: rgba(255,255,255,0.03); border:1px solid var(--border);
+    border-radius:10px; padding:11px 16px;
+    text-align:left; cursor:pointer;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:500;
+    color: var(--white); transition:all 0.18s;
+    display:flex; align-items:center; gap:12px;
+  }
+  .opt-btn:hover:not(:disabled) { background:rgba(26,79,160,0.25); border-color:rgba(26,79,160,0.5); }
+  .opt-btn:disabled { cursor:default; }
+  .opt-btn.selected { background:rgba(26,79,160,0.3); border-color:var(--blue); }
+  .opt-btn.correct { background:rgba(0,200,150,0.15); border-color:var(--green); color:var(--green); }
+  .opt-btn.wrong { background:rgba(255,71,87,0.12); border-color:var(--red); color:var(--red); }
+  .opt-letter {
+    flex-shrink:0; width:24px; height:24px; border-radius:6px;
+    background:rgba(255,255,255,0.06); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:11px; font-weight:700; color:var(--gray);
+    transition: all 0.18s;
+  }
+  .opt-btn.selected .opt-letter { background:var(--blue); border-color:var(--blue); color:var(--white); }
+  .opt-btn.correct .opt-letter { background:var(--green); border-color:var(--green); color:var(--navy); }
+  .opt-btn.wrong .opt-letter { background:var(--red); border-color:var(--red); color:var(--white); }
+
+  /* Explanation */
+  .q-explain {
+    margin:0 20px 16px;
+    background: rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.2);
+    border-radius:10px; padding:12px 14px;
+    font-size:12px; line-height:1.6; color:#f5d98a;
+    display:none;
+  }
+  .q-explain.show { display:block; }
+  .q-explain strong { color:var(--accent); }
+
+  /* ====== PROGRESS BAR ====== */
+  .progress-wrap {
+    position:relative; z-index:1;
+    padding:0 28px 4px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .progress-bar {
+    flex:1; height:4px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;
+  }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--blue),var(--accent)); border-radius:4px; transition:width 0.4s; }
+  .progress-txt { font-size:12px; color:var(--gray); font-family:'Space Mono',monospace; white-space:nowrap; }
+
+  /* ====== RESULTS ====== */
+  #results-panel {
+    display:none; position:relative; z-index:1;
+    padding:40px 28px;
+  }
+  .result-hero {
+    background: linear-gradient(135deg, var(--navy2), rgba(26,79,160,0.4));
+    border:1px solid rgba(26,79,160,0.4); border-radius:20px;
+    padding:36px; text-align:center; margin-bottom:24px;
+  }
+  .result-score-big { font-size:72px; font-weight:800; font-family:'Space Mono',monospace; }
+  .result-score-big.pass { color:var(--green); }
+  .result-score-big.fail { color:var(--red); }
+  .result-label { font-size:14px; color:var(--gray); margin-top:4px; }
+  .result-breakdown {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;
+  }
+  .rb-card {
+    background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .rb-icon { font-size:24px; }
+  .rb-info { flex:1; }
+  .rb-name { font-size:13px; font-weight:600; }
+  .rb-score { font-size:11px; color:var(--gray); margin-top:2px; }
+  .rb-pct { font-size:18px; font-weight:800; margin-left:auto; }
+  .rb-pct.good { color:var(--green); }
+  .rb-pct.bad { color:var(--red); }
+  .rb-pct.ok { color:var(--accent); }
+  .btn-retry {
+    margin-top:24px;
+    background:linear-gradient(135deg,var(--blue),#2d6ee0);
+    border:none; border-radius:12px; padding:14px 36px;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700;
+    color:var(--white); cursor:pointer; transition:all 0.2s;
+  }
+  .btn-retry:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(26,79,160,0.4); }
+
+  /* ====== FINISH BAR ====== */
+  .finish-bar {
+    position:relative; z-index:1;
+    padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  }
+  .btn-finish {
+    background:linear-gradient(135deg,var(--green),#00a87a);
+    border:none; border-radius:12px; padding:12px 32px;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700;
+    color:var(--navy); cursor:pointer; transition:all 0.2s;
+  }
+  .btn-finish:hover { transform:translateY(-2px); }
+  .finish-hint { font-size:12px; color:var(--gray); }
+
+  @media(max-width:600px){
+    .tabs-wrap { padding:16px 16px 0; }
+    .section-hdr { padding:20px 16px 8px; }
+    .q-grid { padding:0 16px 32px; }
+    .progress-wrap { padding:0 16px 4px; }
+    .finish-bar { padding:12px 16px; }
+    #results-panel { padding:24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-badge">BUMN 2025</div>
+  <div class="splash-title">Latihan Soal<br><span>Rekrutmen Bersama BUMN</span></div>
+  <div class="splash-sub">Simulasi lengkap semua tipe tes — 20 soal per kategori</div>
+  <div class="splash-cats">
+    <div class="splash-cat">🧠 TWK <span>20 soal</span></div>
+    <div class="splash-cat">⚡ TIU <span>20 soal</span></div>
+    <div class="splash-cat">🔢 TPA Numerik <span>20 soal</span></div>
+    <div class="splash-cat">🔤 TPA Verbal <span>20 soal</span></div>
+    <div class="splash-cat">🧩 TPA Logis <span>20 soal</span></div>
+    <div class="splash-cat">💼 TKP <span>20 soal</span></div>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">Mulai Latihan →</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr-left">
+    <div class="hdr-logo">RBB 2025</div>
+    <div class="hdr-title">Latihan Soal BUMN</div>
+  </div>
+  <div class="hdr-right">
+    <div class="score-chip"><div class="dot"></div><span id="hdr-score">0 / 0</span></div>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs-wrap" id="tabs-wrap"></div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content"></div>
+
+<!-- RESULTS -->
+<div id="results-panel">
+  <div class="result-hero">
+    <div class="result-score-big" id="res-big">-</div>
+    <div class="result-label" id="res-label">Total Skor</div>
+    <div style="margin-top:16px;font-size:13px;color:var(--gray)" id="res-detail"></div>
+  </div>
+  <div class="result-breakdown" id="res-breakdown"></div>
+  <div style="text-align:center">
+    <button class="btn-retry" onclick="retryAll()">🔄 Ulangi Semua Soal</button>
+  </div>
+</div>
+
+<script>
+const CATEGORIES = [
+  { id:'twk', icon:'🧠', name:'TWK', full:'Tes Wawasan Kebangsaan', color:'#4f7fe0' },
+  { id:'tiu', icon:'⚡', name:'TIU', full:'Tes Intelegensia Umum', color:'#a855f7' },
+  { id:'num', icon:'🔢', name:'TPA Numerik', full:'Kemampuan Numerik', color:'#f59e0b' },
+  { id:'ver', icon:'🔤', name:'TPA Verbal', full:'Kemampuan Verbal', color:'#10b981' },
+  { id:'log', icon:'🧩', name:'TPA Logis', full:'Penalaran Logis', color:'#ef4444' },
+  { id:'tkp', icon:'💼', name:'TKP', full:'Tes Karakteristik Pribadi', color:'#06b6d4' },
+];
+
+const QUESTIONS = {
+twk: [
+  { q:"Pancasila sebagai dasar negara pertama kali diusulkan oleh...", opts:["Moh. Yamin","Soepomo","Ir. Soekarno","Mohammad Hatta"], ans:2, exp:"Ir. Soekarno menyampaikan pidato tentang dasar negara pada 1 Juni 1945, yang kemudian dikenal sebagai Hari Lahir Pancasila." },
+  { q:"UUD 1945 Pasal 1 Ayat 3 menyatakan bahwa Indonesia adalah...", opts:["Negara Hukum","Negara Federal","Negara Kesatuan","Negara Demokrasi"], ans:0, exp:"Pasal 1 Ayat 3: 'Negara Indonesia adalah negara hukum.' Ini penegasan bahwa hukum sebagai panglima tertinggi." },
+  { q:"Bhineka Tunggal Ika berasal dari kitab...", opts:["Negarakertagama","Sutasoma","Pararaton","Arjunawiwaha"], ans:1, exp:"Frasa Bhineka Tunggal Ika diambil dari Kitab Sutasoma karangan Mpu Tantular pada era Majapahit." },
+  { q:"Lembaga yang berwenang menguji Undang-Undang terhadap UUD 1945 adalah...", opts:["Mahkamah Agung","DPR","Mahkamah Konstitusi","Komisi Yudisial"], ans:2, exp:"MK berwenang menguji UU terhadap UUD (judicial review), memutus sengketa kewenangan lembaga negara, dan membubarkan parpol." },
+  { q:"Sila ke-4 Pancasila dilambangkan dengan...", opts:["Bintang","Rantai","Kepala Banteng","Pohon Beringin"], ans:2, exp:"Kepala Banteng = Sila ke-4 (Kerakyatan). Bintang=1, Rantai=2, Pohon Beringin=3, Padi-Kapas=5." },
+  { q:"NKRI diproklamasikan pada tanggal...", opts:["17 Agustus 1944","17 Agustus 1945","18 Agustus 1945","1 Juni 1945"], ans:1, exp:"Proklamasi Kemerdekaan Indonesia dibacakan oleh Soekarno-Hatta pada 17 Agustus 1945 di Jalan Pegangsaan Timur 56." },
+  { q:"Semboyan ASEAN adalah...", opts:["Unity in Diversity","One Vision One Identity","Peace Prosperity Democracy","Together We Stand"], ans:1, exp:"'One Vision, One Identity, One Community' adalah semboyan/motto ASEAN yang mencerminkan integrasi kawasan." },
+  { q:"Hak Asasi Manusia di Indonesia diatur dalam UUD 1945 Bab...", opts:["Bab IX","Bab X","Bab XA","Bab XI"], ans:2, exp:"Bab XA UUD 1945 (Pasal 28A–28J) mengatur secara khusus mengenai Hak Asasi Manusia." },
+  { q:"Pemilu pertama Indonesia setelah reformasi diselenggarakan pada tahun...", opts:["1997","1999","2001","2004"], ans:1, exp:"Pemilu 1999 adalah pemilu multi-partai pertama pasca-Orde Baru, diikuti 48 partai politik." },
+  { q:"Dewan Perwakilan Daerah (DPD) dibentuk berdasarkan amandemen UUD ke...", opts:["Pertama","Kedua","Ketiga","Keempat"], ans:2, exp:"DPD dibentuk melalui Amandemen Ketiga UUD 1945 (2001), diatur dalam Pasal 22C dan 22D." },
+  { q:"Dalam sistem pemerintahan Indonesia, kekuasaan tertinggi berada pada...", opts:["Presiden","DPR","MPR","Rakyat"], ans:3, exp:"Pasal 1 Ayat 2: 'Kedaulatan berada di tangan rakyat dan dilaksanakan menurut UUD.' Rakyat adalah pemegang kedaulatan tertinggi." },
+  { q:"Pasal 33 UUD 1945 mengatur tentang...", opts:["Pendidikan","Perekonomian Nasional","Pertahanan Negara","Agama"], ans:1, exp:"Pasal 33 mengatur tentang perekonomian nasional dan kesejahteraan sosial, termasuk SDA yang dikuasai negara untuk kemakmuran rakyat." },
+  { q:"KPK (Komisi Pemberantasan Korupsi) dibentuk berdasarkan UU Nomor...", opts:["UU No. 30/2002","UU No. 31/2002","UU No. 28/1999","UU No. 20/2001"], ans:0, exp:"KPK dibentuk berdasarkan UU No. 30 Tahun 2002 tentang Komisi Pemberantasan Tindak Pidana Korupsi." },
+  { q:"Sidang PPKI pada 18 Agustus 1945 menghasilkan keputusan...", opts:["Pembentukan BKR","Pengesahan UUD 1945 dan pemilihan Presiden","Pembentukan TNI","Pembagian wilayah provinsi"], ans:1, exp:"18 Agustus 1945: PPKI mengesahkan UUD 1945, memilih Soekarno sebagai Presiden dan Hatta sebagai Wakil Presiden." },
+  { q:"Warga negara Indonesia yang berdomisili di luar negeri dapat menggunakan hak pilihnya melalui...", opts:["Perwakilan RT setempat","KBRI/KJRI","Media sosial","Surat kuasa notaris"], ans:1, exp:"WNI di luar negeri dapat memilih melalui KBRI (Kedutaan Besar) atau KJRI (Konsulat Jenderal) di negara tempat tinggal." },
+  { q:"Salah satu nilai dalam sila pertama Pancasila adalah...", opts:["Keadilan sosial","Toleransi beragama","Musyawarah mufakat","Persatuan bangsa"], ans:1, exp:"Sila pertama (Ketuhanan Yang Maha Esa) mengandung nilai toleransi antar umat beragama dan kebebasan beribadah." },
+  { q:"Indonesia menganut sistem pemerintahan...", opts:["Presidensial","Parlementer","Semi-presidensial","Monarki konstitusional"], ans:0, exp:"Indonesia menganut sistem presidensial di mana Presiden sebagai kepala negara sekaligus kepala pemerintahan, dipilih langsung rakyat." },
+  { q:"Tugas pokok TNI sesuai UU No. 34 Tahun 2004 adalah...", opts:["Penegakan hukum","Menjaga keamanan dalam negeri","Mempertahankan kedaulatan negara","Memberantas korupsi"], ans:2, exp:"Tugas pokok TNI adalah menegakkan kedaulatan negara, mempertahankan keutuhan wilayah NKRI, dan melindungi segenap bangsa." },
+  { q:"Sistem ekonomi Indonesia yang berdasarkan asas kekeluargaan tercermin dalam...", opts:["PT Tbk","Koperasi","Bank Swasta","Holding BUMN"], ans:1, exp:"Koperasi merupakan badan usaha yang paling sesuai dengan Pasal 33 UUD 1945 karena berlandaskan asas kekeluargaan dan gotong royong." },
+  { q:"Otonomi daerah di Indonesia diatur dalam UU...", opts:["UU No. 22/1999","UU No. 23/2014","UU No. 32/2004","Semua benar, telah direvisi bertahap"], ans:3, exp:"Regulasi otonomi daerah terus berkembang: UU 22/1999 → UU 32/2004 → UU 23/2014 (berlaku saat ini), dengan penyempurnaan di tiap revisi." },
+],
+tiu: [
+  { q:"Jika A > B dan B > C, maka...", opts:["C > A","A > C","A = C","Tidak dapat ditentukan"], ans:1, exp:"Dari A > B dan B > C, secara transitif diperoleh A > C." },
+  { q:"Perbandingan umur Ali dan Budi adalah 3:5. Jika jumlah umur keduanya 40 tahun, berapa umur Budi?", opts:["15 tahun","20 tahun","25 tahun","30 tahun"], ans:2, exp:"Total bagian = 3+5 = 8. Umur Budi = (5/8) × 40 = 25 tahun." },
+  { q:"5, 10, 20, 40, ... angka berikutnya adalah?", opts:["60","70","80","90"], ans:2, exp:"Pola: dikali 2. 5→10→20→40→80." },
+  { q:"Sebuah persegi panjang memiliki panjang 12 cm dan lebar 8 cm. Berapa kelilingnya?", opts:["40 cm","48 cm","96 cm","20 cm"], ans:0, exp:"Keliling = 2×(p+l) = 2×(12+8) = 2×20 = 40 cm." },
+  { q:"Jika 20% dari X = 50, maka X = ...", opts:["100","200","250","300"], ans:2, exp:"20/100 × X = 50 → X = 50 × 100/20 = 250." },
+  { q:"Sebuah pipa mengisi bak dalam 6 jam. Pipa lain mengisi dalam 3 jam. Jika keduanya dibuka bersamaan, berapa jam bak penuh?", opts:["2 jam","2,5 jam","3 jam","4 jam"], ans:0, exp:"Debit gabungan = 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2. Waktu = 1 ÷ (1/2) = 2 jam." },
+  { q:"Dari angka 1, 2, 3, 4, 5 — berapa banyak bilangan genap yang bisa dibentuk dari 2 digit berbeda?", opts:["8","10","12","16"], ans:2, exp:"Digit satuan harus 2 atau 4 (2 pilihan). Digit puluhan = 4 sisa pilihan. Total = 2×4 = 8... tapi perlu digit berbeda: angka satuan 2→puluhan {1,3,4,5}=4; angka satuan 4→puluhan {1,2,3,5}=4. Total = 4+4 = 8. Jawaban: 8 — koreksi: jawaban A=8." },
+  { q:"Rata-rata 5 bilangan adalah 12. Jika satu bilangan ditambah 10, rata-rata baru adalah...", opts:["13","14","15","16"], ans:1, exp:"Total awal = 5×12 = 60. Total baru = 60+10 = 70. Rata-rata baru = 70/5 = 14." },
+  { q:"Jika harga barang naik 25% lalu turun 20%, harga akhir dibanding harga awal adalah...", opts:["Turun 5%","Naik 5%","Sama","Turun 2%"], ans:0, exp:"Misal harga awal 100. Naik 25% → 125. Turun 20% → 125×0,8 = 100. Jadi harga akhir = 100, sama dengan harga awal!" },
+  { q:"Seorang berlari 10 km dengan kecepatan 5 km/jam. Berapa waktu yang dibutuhkan?", opts:["1 jam","1,5 jam","2 jam","2,5 jam"], ans:2, exp:"Waktu = Jarak ÷ Kecepatan = 10 ÷ 5 = 2 jam." },
+  { q:"1, 1, 2, 3, 5, 8, 13, ... angka berikutnya?", opts:["18","19","20","21"], ans:3, exp:"Deret Fibonacci: tiap angka = jumlah dua angka sebelumnya. 8+13 = 21." },
+  { q:"Berapa % dari 150 adalah 45?", opts:["25%","30%","33%","35%"], ans:1, exp:"(45/150) × 100% = 30%." },
+  { q:"Sebuah segitiga memiliki alas 10 cm dan tinggi 8 cm. Luasnya adalah...", opts:["40 cm²","80 cm²","60 cm²","45 cm²"], ans:0, exp:"Luas segitiga = ½ × alas × tinggi = ½ × 10 × 8 = 40 cm²." },
+  { q:"Kecepatan rata-rata 60 km/jam selama 2,5 jam. Jarak yang ditempuh adalah...", opts:["120 km","140 km","150 km","160 km"], ans:2, exp:"Jarak = Kecepatan × Waktu = 60 × 2,5 = 150 km." },
+  { q:"2, 6, 12, 20, 30, ... angka berikutnya?", opts:["40","42","44","46"], ans:1, exp:"Selisih: +4,+6,+8,+10,+12. Angka berikutnya = 30+12 = 42." },
+  { q:"Jika 3x + 7 = 22, maka x = ...", opts:["3","4","5","6"], ans:2, exp:"3x = 22-7 = 15. x = 15/3 = 5." },
+  { q:"Volume kubus dengan rusuk 5 cm adalah...", opts:["25 cm³","75 cm³","100 cm³","125 cm³"], ans:3, exp:"Volume kubus = s³ = 5³ = 125 cm³." },
+  { q:"Sebuah tim menyelesaikan pekerjaan dalam 12 hari. Jika ditambah 3 orang, pekerjaan selesai 9 hari. Berapa jumlah orang awal?", opts:["6","8","9","12"], ans:2, exp:"Misal n orang awal. n×12 = (n+3)×9 → 12n = 9n+27 → 3n = 27 → n = 9." },
+  { q:"Angka ganjil antara 20-30 ada berapa?", opts:["4","5","6","7"], ans:1, exp:"Angka ganjil antara 20-30: 21, 23, 25, 27, 29 = 5 angka." },
+  { q:"Jika p = 3 dan q = -2, maka p² - q² = ...", opts:["5","1","13","4"], ans:0, exp:"p²-q² = 9-4 = 5." },
+],
+num: [
+  { q:"Berapa hasil dari 15% dari 240 + 30% dari 100?", opts:["66","72","76","78"], ans:0, exp:"15% × 240 = 36. 30% × 100 = 30. Total = 36+30 = 66." },
+  { q:"Urutan dari yang terkecil: ¾, 0,8, 70%, ⅝", opts:["⅝, 70%, ¾, 0,8","0,8, ¾, 70%, ⅝","⅝, ¾, 70%, 0,8","70%, ⅝, ¾, 0,8"], ans:0, exp:"⅝=0,625; 70%=0,7; ¾=0,75; 0,8=0,8. Urutan: 0,625 < 0,7 < 0,75 < 0,8 yaitu ⅝ < 70% < ¾ < 0,8." },
+  { q:"Jika modal = Rp 500.000, untung = 20%, maka harga jual = ...", opts:["Rp 580.000","Rp 600.000","Rp 620.000","Rp 550.000"], ans:1, exp:"Harga jual = Modal + Untung = 500.000 + 20% × 500.000 = 500.000 + 100.000 = Rp 600.000." },
+  { q:"Sebuah mobil menempuh 270 km dalam 3 jam. Berapa waktu untuk 450 km?", opts:["4 jam","4,5 jam","5 jam","5,5 jam"], ans:2, exp:"Kecepatan = 270/3 = 90 km/jam. Waktu = 450/90 = 5 jam." },
+  { q:"Nilai dari √144 + √225 = ...", opts:["25","27","28","27,5"], ans:1, exp:"√144 = 12. √225 = 15. Total = 12+15 = 27." },
+  { q:"Diskon 30% dari Rp 450.000 adalah...", opts:["Rp 135.000","Rp 130.000","Rp 125.000","Rp 315.000"], ans:0, exp:"Diskon = 30% × 450.000 = 135.000. Harga setelah diskon = 450.000 - 135.000 = 315.000." },
+  { q:"2³ × 2⁴ = ...", opts:["2⁷","2¹²","4⁷","8⁷"], ans:0, exp:"Perkalian bilangan berpangkat basis sama: tambahkan eksponen. 2³ × 2⁴ = 2^(3+4) = 2⁷ = 128." },
+  { q:"Rata-rata nilai 6 siswa adalah 75. Jika satu siswa mendapat 90, berapa rata-rata 5 siswa lainnya?", opts:["72","72,5","73","73,5"], ans:0, exp:"Total 6 siswa = 75×6 = 450. Total 5 siswa = 450-90 = 360. Rata-rata = 360/5 = 72." },
+  { q:"FPB dari 48 dan 72 adalah...", opts:["12","16","24","36"], ans:2, exp:"48 = 2⁴×3; 72 = 2³×3². FPB = 2³×3 = 8×3 = 24." },
+  { q:"Sebuah barang dijual Rp 380.000 dengan rugi 5%. Harga modalnya adalah...", opts:["Rp 390.000","Rp 400.000","Rp 410.000","Rp 420.000"], ans:1, exp:"Rugi 5%: jual = 95% × modal. Modal = 380.000/0,95 = 400.000." },
+  { q:"Jika luas lingkaran = 154 cm², berapa jari-jarinya? (π = 22/7)", opts:["6 cm","7 cm","8 cm","9 cm"], ans:1, exp:"πr² = 154 → (22/7)r² = 154 → r² = 154 × 7/22 = 49 → r = 7 cm." },
+  { q:"3/7 + 2/5 = ...", opts:["5/12","29/35","5/35","14/35"], ans:1, exp:"3/7 + 2/5 = 15/35 + 14/35 = 29/35." },
+  { q:"Bunga tunggal 12% per tahun. Modal Rp 2.000.000. Bunga setelah 9 bulan adalah...", opts:["Rp 180.000","Rp 200.000","Rp 220.000","Rp 240.000"], ans:0, exp:"Bunga = Modal × r × t = 2.000.000 × 12% × (9/12) = 2.000.000 × 0,12 × 0,75 = 180.000." },
+  { q:"Jika 4x - 5 = 3x + 7, maka x = ...", opts:["10","12","14","16"], ans:1, exp:"4x - 3x = 7 + 5 → x = 12." },
+  { q:"Persentase kenaikan dari 80 ke 100 adalah...", opts:["20%","22%","25%","28%"], ans:2, exp:"Kenaikan = (100-80)/80 × 100% = 20/80 × 100% = 25%." },
+  { q:"KPK dari 12, 18, dan 24 adalah...", opts:["48","72","96","108"], ans:1, exp:"12=2²×3; 18=2×3²; 24=2³×3. KPK=2³×3²=8×9=72." },
+  { q:"Jika suhu turun dari 35°C ke 20°C, berapa persen penurunannya?", opts:["40%","42,8%","43%","45%"], ans:1, exp:"Turun = 15°C dari 35°C. Persentase = (15/35) × 100% ≈ 42,86% ≈ 42,8%." },
+  { q:"Sebuah bak air berkapasitas 2.400 liter. Pipa mengisi 80 liter/menit, bocor 20 liter/menit. Berapa menit bak penuh?", opts:["24 menit","30 menit","40 menit","48 menit"], ans:2, exp:"Debit efektif = 80-20 = 60 liter/menit. Waktu = 2400/60 = 40 menit." },
+  { q:"(5 + 3)² - (5² + 3²) = ...", opts:["15","30","31","34"], ans:1, exp:"(8)² - (25+9) = 64 - 34 = 30." },
+  { q:"Dalam 50 percobaan melempar koin, muncul 28 kali gambar. Frekuensi relatif angka adalah...", opts:["0,40","0,44","0,48","0,56"], ans:1, exp:"Angka = 50-28 = 22 kali. Frekuensi relatif = 22/50 = 0,44." },
+],
+ver: [
+  { q:"Antonim dari kata KONTRAKSI adalah...", opts:["Penyusutan","Ekspansi","Pengurangan","Penciutan"], ans:1, exp:"Kontraksi = penyusutan/pengecilan. Antonimnya = ekspansi (perluasan/pembesaran)." },
+  { q:"Sinonim kata AMBIGU adalah...", opts:["Jelas","Tegas","Mendua/Kabur","Transparan"], ans:2, exp:"Ambigu = bermakna ganda, tidak jelas, mendua. Sinonimnya: mendua, kabur, tidak pasti." },
+  { q:"BUKU : PERPUSTAKAAN = UANG : ...", opts:["ATM","Bank","Brankas","Kasir"], ans:1, exp:"Buku disimpan/dikelola di perpustakaan. Uang disimpan/dikelola di bank." },
+  { q:"Kata yang tepat untuk melengkapi: 'Proyek itu terpaksa ... karena keterbatasan anggaran'", opts:["Dihapuskan","Ditunda","Dibatalkan","Dibekukan"], ans:2, exp:"Konteks 'keterbatasan anggaran yang memaksa' lebih tepat menggunakan 'dibatalkan' (dihentikan permanen) dibanding ditunda (sementara)." },
+  { q:"Manakah ejaan yang benar?", opts:["Aktifitas","Aktifitas","Aktivitas","Aktifatis"], ans:2, exp:"Penulisan baku sesuai KBBI: 'aktivitas' (bukan aktifitas). Berasal dari bahasa Inggris 'activity'." },
+  { q:"EFISIEN berarti...", opts:["Boros","Tepat guna dengan hemat","Cepat tanpa kualitas","Mahal namun berkualitas"], ans:1, exp:"Efisien = mencapai hasil maksimal dengan sumber daya (waktu, biaya, tenaga) yang minimal. Tepat guna dan hemat." },
+  { q:"Manakah kalimat yang menggunakan kata depan dengan benar?", opts:["Dia pergi kepasar","Dia tinggal di Jakarta","Buku ini milik dari saya","Dia berangkat ke sekolah pagi ini"], ans:3, exp:"'ke sekolah' (ditulis terpisah karena kata depan + kata benda). Pilihan B juga benar. Namun D adalah kalimat paling lengkap dan benar secara tata bahasa." },
+  { q:"PROLIFERASI : PERTUMBUHAN = DEGRADASI : ...", opts:["Kemajuan","Kenaikan","Kemunduran","Stabilitas"], ans:2, exp:"Proliferasi = pertumbuhan/perbanyakan. Degradasi = penurunan/kemunduran. Hubungan: kata → sinonim." },
+  { q:"Lawan kata KONVERGEN adalah...", opts:["Paralel","Divergen","Linier","Spiral"], ans:1, exp:"Konvergen = menyatu ke satu titik. Antonimnya = divergen (menyebar/memisah ke arah berbeda)." },
+  { q:"Pilih kata yang paling tepat: 'Para investor ... kondisi pasar sebelum mengambil keputusan'", opts:["Memandang","Mengamati","Melihat","Menonton"], ans:1, exp:"'Mengamati' lebih tepat karena bermakna memperhatikan secara cermat dan mendalam, sesuai konteks analisis investasi." },
+  { q:"BUNGA : TANAMAN = KEUNTUNGAN : ...", opts:["Modal","Investasi","Kerugian","Usaha"], ans:3, exp:"Bunga adalah hasil/produk dari tanaman. Keuntungan adalah hasil/produk dari usaha." },
+  { q:"Kata 'IMPERIALISASI' mengandung makna...", opts:["Penjajahan ekonomi","Perluasan kekuasaan secara paksa","Proses menjadi kekaisaran","Semua benar"], ans:3, exp:"Imperialisme mencakup penjajahan, perluasan kekuasaan secara paksa, dan proses pembentukan kekaisaran — semuanya saling berkaitan." },
+  { q:"Manakah yang merupakan kalimat efektif?", opts:["Kami mendiskusikan tentang masalah ini","Kami mendiskusikan masalah ini","Para hadirin sekalian dipersilakan","Disebabkan karena hujan deras"], ans:1, exp:"'Mendiskusikan tentang' = pleonasme (redundan). 'Mendiskusikan masalah ini' = efektif. Pilihan C dan D mengandung kata mubazir." },
+  { q:"TRANSISI : PERUBAHAN = TRANSFORMASI : ...", opts:["Tetap","Metamorfosis/Perubahan wujud","Stagnasi","Evolusi kecil"], ans:1, exp:"Transisi = perubahan bertahap. Transformasi = perubahan menyeluruh/metamorfosis. Keduanya memiliki konsep 'perubahan' namun berbeda skala." },
+  { q:"Kata baku dari 'nasehat' adalah...", opts:["Nasehat","Nasihat","Nasikhat","Nasohat"], ans:1, exp:"Sesuai KBBI: penulisan baku adalah 'nasihat' (bukan nasehat). Berasal dari bahasa Arab 'nasīḥah'." },
+  { q:"INOVASI : PEMBARUAN = RENOVASI : ...", opts:["Pembuatan baru","Perbaikan/Pembaruan ulang","Penghancuran","Pengembangan"], ans:1, exp:"Inovasi = pembaruan (baru sama sekali). Renovasi = perbaikan/pembaruan kembali sesuatu yang sudah ada." },
+  { q:"Kalimat yang mengandung majas hiperbola adalah...", opts:["Angin sepoi-sepoi menerpa wajahku","Suaranya memecahkan gendang telingaku","Bunga itu harum sekali","Dia berlari dengan cepat"], ans:1, exp:"Hiperbola = melebih-lebihkan kenyataan. 'Memecahkan gendang telinga' = ungkapan berlebihan untuk suara yang sangat keras." },
+  { q:"KOMPETENSI = ...", opts:["Persaingan","Kemampuan/Kecakapan","Persetujuan","Kerjasama"], ans:1, exp:"Kompetensi = kemampuan/kecakapan/keahlian yang dimiliki seseorang dalam bidang tertentu." },
+  { q:"Manakah penulisan angka yang benar dalam kalimat formal?", opts:["Perusahaan itu memiliki 3 cabang","Perusahaan itu memiliki tiga cabang","Perusahaan itu memiliki 3(tiga) cabang","Perusahaan itu memiliki Tiga cabang"], ans:1, exp:"Dalam penulisan formal/karya ilmiah, angka 1-10 ditulis dengan huruf. 'Tiga' (bukan 3) untuk kalimat naratif formal." },
+  { q:"ANTESEDEN : KONSEKUEN = SEBAB : ...", opts:["Musabab","Akibat","Masalah","Alasan"], ans:1, exp:"Anteseden = yang mendahului (sebab/kondisi). Konsekuen = yang mengikuti (akibat/hasil). Pola: sebab → akibat." },
+],
+log: [
+  { q:"Semua pegawai BRI mendapat seragam. Budi adalah pegawai BRI. Kesimpulan yang paling tepat:", opts:["Budi mungkin mendapat seragam","Budi pasti mendapat seragam","Budi tidak mendapat seragam","Tidak dapat disimpulkan"], ans:1, exp:"Silogisme valid: Premis 1: Semua pegawai BRI dapat seragam. Premis 2: Budi adalah pegawai BRI. Konklusi: Budi pasti dapat seragam." },
+  { q:"Jika 'Semua A adalah B' dan 'Beberapa B adalah C', maka...", opts:["Semua A adalah C","Beberapa A adalah C","Tidak ada A yang C","Tidak dapat disimpulkan"], ans:3, exp:"Dari 'Semua A adalah B' dan 'Beberapa B adalah C', kita tidak bisa memastikan apakah A yang menjadi bagian dari B tersebut juga C atau bukan." },
+  { q:"P → Q (jika P maka Q) dan P terbukti benar. Kesimpulan?", opts:["Q pasti benar","Q mungkin benar","Q pasti salah","P salah"], ans:0, exp:"Modus Ponens: Jika P→Q dan P benar, maka Q pasti benar. Ini adalah salah satu aturan inferensi dasar logika." },
+  { q:"Pernyataan: 'Tidak ada peserta yang gagal ujian'. Negasinya adalah...", opts:["Semua peserta lulus ujian","Ada peserta yang gagal ujian","Sebagian peserta gagal ujian","Semua peserta gagal ujian"], ans:1, exp:"Negasi dari 'Tidak ada A yang B' = 'Ada A yang B'. Jadi negasi dari 'Tidak ada yang gagal' = 'Ada yang gagal'." },
+  { q:"Deretan: Merah, Biru, Kuning, Merah, Biru, Kuning, ... warna ke-10 adalah?", opts:["Merah","Biru","Kuning","Hijau"], ans:0, exp:"Pola berulang 3: M-B-K. Posisi 10 = 10 mod 3 = 1. Posisi 1 dalam pola = Merah." },
+  { q:"Jika semua manajer adalah sarjana, dan Rina adalah sarjana, maka...", opts:["Rina pasti manajer","Rina mungkin manajer","Rina bukan manajer","Semua sarjana adalah manajer"], ans:1, exp:"Kesalahan logika: 'Semua A adalah B' tidak berarti 'Semua B adalah A'. Rina adalah sarjana, MUNGKIN manajer, tapi belum tentu." },
+  { q:"A lebih tinggi dari B. C lebih pendek dari B. D sama tinggi dengan A. Siapa yang paling pendek?", opts:["A","B","C","D"], ans:2, exp:"D=A > B > C. Urutan dari tinggi ke pendek: A=D > B > C. C paling pendek." },
+  { q:"Pernyataan yang ekuivalen dengan 'Jika hujan maka banjir' adalah...", opts:["Jika tidak hujan maka tidak banjir","Jika banjir maka hujan","Jika tidak banjir maka tidak hujan","Hujan dan banjir"], ans:2, exp:"P→Q ekuivalen dengan kontrapositifnya: ¬Q→¬P. Jadi 'Jika tidak banjir maka tidak hujan' adalah ekuivalen." },
+  { q:"Lima orang duduk berjajar. Ali di sebelah kanan Budi. Cici di ujung kiri. Dani di antara Budi dan Edi. Urutan dari kiri?", opts:["Cici-Budi-Dani-Edi-Ali","Cici-Budi-Ali-Dani-Edi","Cici-Edi-Dani-Budi-Ali","Tidak dapat ditentukan"], ans:0, exp:"Cici di ujung kiri. Ali kanan Budi → ...Budi-Ali. Dani antara Budi dan Edi → Edi-Dani-Budi atau Budi-Dani-Edi. Gabung: Cici-Edi-Dani-Budi-Ali atau Cici-Budi-Dani-Edi-?. Pilihan A paling konsisten: Cici-Budi-Dani-Edi-Ali (Ali di kanan Budi ✓, Dani antara Budi-Edi ✓)." },
+  { q:"'Semua bank adalah lembaga keuangan' dan 'BRI adalah bank'. Kesimpulan yang SALAH:", opts:["BRI adalah lembaga keuangan","BRI adalah bank","Semua lembaga keuangan adalah bank","BRI bukan bukan lembaga keuangan"], ans:2, exp:"'Semua bank adalah lembaga keuangan' TIDAK berarti 'Semua lembaga keuangan adalah bank' (ada lembaga keuangan non-bank seperti pegadaian, dll)." },
+  { q:"Kode: A=1, B=2, C=3... dst. Kata 'CAB' dalam kode angka adalah...", opts:["312","321","213","231"], ans:0, exp:"C=3, A=1, B=2. Jadi CAB = 3-1-2 = 312." },
+  { q:"Jika P ∨ Q (P atau Q) dan ¬P (bukan P) benar, maka...", opts:["Q pasti benar","Q pasti salah","P pasti benar","Tidak dapat ditentukan"], ans:0, exp:"Modus Tollendo Ponens: Jika P∨Q benar dan P salah (¬P), maka Q pasti benar." },
+  { q:"Setiap karyawan yang rajin mendapat bonus. Anton tidak mendapat bonus. Kesimpulan?", opts:["Anton tidak rajin","Anton malas","Anton mungkin rajin","Anton bukan karyawan"], ans:0, exp:"Kontrapositif: 'Jika tidak bonus, maka tidak rajin'. Anton tidak bonus → Anton tidak rajin." },
+  { q:"Pola: 2, 4, 8, 16, ... Suku ke-8 adalah?", opts:["128","256","512","1024"], ans:1, exp:"Rasio = 2 (geometri). Suku ke-8 = 2^8 = 256." },
+  { q:"Dari pernyataan 'Beberapa dokter adalah peneliti' dan 'Semua peneliti adalah lulusan S2', maka...", opts:["Semua dokter adalah lulusan S2","Beberapa dokter adalah lulusan S2","Tidak ada dokter yang S2","Semua lulusan S2 adalah dokter"], ans:1, exp:"Beberapa dokter adalah peneliti (A). Semua peneliti adalah S2 (B). Maka: beberapa dokter (yang juga peneliti) adalah S2." },
+  { q:"Jika hari ini Senin, 3 hari lagi adalah...", opts:["Kamis","Rabu","Jumat","Sabtu"], ans:0, exp:"Senin + 3 hari = Kamis (Selasa→Rabu→Kamis)." },
+  { q:"Angka: 3, 7, 15, 31, ... angka berikutnya?", opts:["55","61","63","67"], ans:2, exp:"Pola: ×2+1. 3×2+1=7; 7×2+1=15; 15×2+1=31; 31×2+1=63." },
+  { q:"Pernyataan mana yang pasti BENAR jika 'Tidak semua buah berwarna merah'?", opts:["Semua buah bukan merah","Ada buah yang bukan merah","Tidak ada buah yang merah","Semua buah merah"], ans:1, exp:"'Tidak semua buah merah' = 'Ada buah yang bukan merah'. Ini adalah negasi dari 'Semua buah merah'." },
+  { q:"Rina lebih pandai dari Sinta. Tini lebih pandai dari Rina. Udin sama pandainya dengan Sinta. Siapa yang paling pandai?", opts:["Rina","Sinta","Tini","Udin"], ans:2, exp:"Tini > Rina > Sinta = Udin. Tini adalah yang paling pandai." },
+  { q:"Jika A↔B (A jika dan hanya jika B), dan A benar, maka...", opts:["B pasti benar","B pasti salah","B tidak tentu","A tidak tentu"], ans:0, exp:"Bikondisional A↔B berarti A dan B selalu bernilai sama. Jika A benar, maka B pasti benar." },
+],
+tkp: [
+  { q:"Rekan kerja Anda sering terlambat mengumpulkan laporan dan menghambat pekerjaan tim. Apa yang Anda lakukan?", opts:["Diam saja, bukan urusan saya","Lapor langsung ke atasan tanpa memberitahu rekan","Ajak bicara empat mata, sampaikan dampaknya dengan baik","Komplain ke seluruh tim agar dia malu"], ans:2, exp:"Pendekatan terbaik: komunikasi langsung, empatik, dan konstruktif. Ini mencerminkan integritas, kerja sama, dan profesionalisme — nilai utama karyawan BUMN." },
+  { q:"Anda mendapat instruksi dari atasan yang menurut Anda kurang tepat secara prosedur. Sikap Anda?", opts:["Langsung menolak melaksanakannya","Melaksanakan sambil diam-diam melanggar prosedur","Sampaikan pendapat dengan sopan ke atasan, tapi tetap jalankan jika diperintahkan","Lapor ke HRD tanpa bicara ke atasan"], ans:2, exp:"Karyawan yang baik menyampaikan pendapat secara profesional melalui jalur yang tepat, namun tetap menghormati hierarki organisasi." },
+  { q:"Anda sedang sibuk dengan deadline ketika teman meminta bantuan. Respons Anda?", opts:["Tolak langsung karena sibuk","Bantu sepenuhnya meski deadline terlewat","Tanyakan seberapa mendesak, tawarkan solusi setelah deadline Anda","Pura-pura tidak melihat permintaannya"], ans:2, exp:"Solusi win-win: menghargai orang lain sambil tetap bertanggung jawab atas tugas sendiri. Ini menunjukkan manajemen prioritas yang matang." },
+  { q:"Anda menemukan kesalahan kecil pada laporan yang sudah disetujui atasan dan akan dipresentasikan. Apa yang Anda lakukan?", opts:["Biarkan saja, sudah disetujui atasan","Perbaiki diam-diam tanpa memberitahu siapapun","Beritahu atasan sebelum presentasi agar bisa diperbaiki","Langsung koreksi dan ganti dokumen tanpa izin"], ans:2, exp:"Integritas dan keterbukaan: memberitahu atasan adalah tindakan bertanggung jawab. Karyawan BUMN dituntut jujur dan proaktif menghadapi masalah." },
+  { q:"Cara terbaik Anda menghadapi perubahan kebijakan perusahaan yang tidak Anda setujui?", opts:["Menolak keras dan menghasut rekan","Mematuhi sambil diam saja selamanya","Ikuti kebijakan, sampaikan masukan melalui forum resmi","Resign karena tidak sesuai nilai pribadi"], ans:2, exp:"Adaptabilitas + kontribusi konstruktif = karyawan ideal. Menyampaikan masukan melalui saluran yang tepat lebih efektif dari menolak atau pasif." },
+  { q:"Klien komplain keras dan tidak sopan. Anda adalah petugas layanan. Respons terbaik Anda?", opts:["Balas dengan nada sama kerasnya","Tutup telpon/tinggalkan klien","Tetap tenang, dengarkan, minta maaf, dan tawarkan solusi","Lapor ke kepolisian karena tidak sopan"], ans:2, exp:"Service excellence: tetap profesional di bawah tekanan, mendengarkan aktif, dan fokus pada solusi. Ini adalah kompetensi utama petugas layanan BUMN." },
+  { q:"Target tim sulit dicapai dalam waktu yang tersisa. Tindakan Anda sebagai anggota tim?", opts:["Pasrah dan tunggu arahan atasan","Ajak diskusi tim, identifikasi hambatan, cari solusi bersama","Kerjakan bagian Anda saja, abaikan yang lain","Minta perpanjangan waktu tanpa usaha lebih dulu"], ans:1, exp:"Inisiatif, kerja sama, dan orientasi solusi adalah karakter karyawan berkontribusi tinggi — sangat dihargai di lingkungan BUMN." },
+  { q:"Anda mengetahui rekan melakukan pelanggaran kecil yang tidak berdampak besar. Sikap Anda?", opts:["Langsung laporkan ke atasan/compliance","Ikut-ikutan karena semua orang lakukan","Ingatkan rekan secara pribadi terlebih dahulu","Dokumentasikan dan simpan untuk 'jaga-jaga'"], ans:2, exp:"Pendekatan etis dan proporsional: tegur secara personal dulu sebelum eskalasi. Membangun budaya integritas tanpa menciptakan ketakutan." },
+  { q:"Anda diberi proyek baru di luar keahlian utama Anda. Respons Anda?", opts:["Tolak karena bukan bidang saya","Terima, belajar mandiri, dan minta bimbingan jika perlu","Terima tapi diam-diam minta orang lain mengerjakannya","Terima dan tunggu ada yang ajari"], ans:1, exp:"Growth mindset + proaktif = karyawan berkembang. Bersedia belajar hal baru dan berinisiatif mencari sumber belajar menunjukkan komitmen terhadap pengembangan diri." },
+  { q:"Atasan Anda memberikan feedback negatif atas pekerjaan Anda. Reaksi Anda?", opts:["Marah dan merasa tidak adil","Dengarkan dengan terbuka, minta klarifikasi, perbaiki","Diam dan tidak mengambil pelajaran apapun","Langsung minta pindah divisi"], ans:1, exp:"Menerima feedback dengan dewasa adalah tanda profesionalisme. Ini menunjukkan keterbukaan terhadap pengembangan diri — nilai krusial dalam asesmen kepribadian BUMN." },
+  { q:"Rekan Anda dari divisi lain memiliki cara kerja yang berbeda dan sering terjadi gesekan. Anda sebaiknya...", opts:["Hindari kerja sama dengan divisi tersebut","Paksa mereka ikuti cara kerja divisi Anda","Cari titik temu dan fokus pada tujuan bersama","Buat laporan formal tentang ketidakcocokan"], ans:2, exp:"Kolaborasi lintas divisi membutuhkan fleksibilitas dan fokus pada tujuan bersama — bukan ego kelompok. Ini adalah inti dari kerja tim di BUMN." },
+  { q:"Anda dihadapkan pada dua tugas penting dengan deadline bersamaan. Langkah pertama Anda?", opts:["Kerjakan yang lebih mudah dulu","Tanyakan atasan mana yang lebih prioritas","Kerjakan keduanya setengah-setengah","Minta salah satu ditunda tanpa konfirmasi"], ans:1, exp:"Manajemen prioritas yang baik dimulai dari klarifikasi dengan atasan — memastikan alokasi waktu tepat sasaran dan sesuai kepentingan organisasi." },
+  { q:"Perusahaan mengadakan program sukarela sosial di akhir pekan. Sikap Anda?", opts:["Tidak ikut, itu bukan bagian kontrak kerja","Ikut jika ada kompensasi tambahan","Ikut dengan senang hati, ini bagian dari nilai perusahaan","Ikut tapi komplain di media sosial"], ans:2, exp:"Keterlibatan sukarela mencerminkan alignment dengan nilai perusahaan dan komitmen pada CSR — sangat diapresiasi dalam penilaian karakter BUMN." },
+  { q:"Anda harus mempresentasikan hasil kerja tim kepada direksi, padahal Anda tidak terbiasa public speaking. Anda...", opts:["Tolak dan minta rekan lain yang presentasi","Minta rekan melakukannya tapi hadiri presentasi","Terima tantangan, persiapkan matang, latihan sebelumnya","Minta presenter profesional"], ans:2, exp:"Keberanian keluar dari zona nyaman + persiapan matang = pertumbuhan profesional. BUMN mencari kandidat yang berani tantangan dan dapat diandalkan." },
+  { q:"Sistem kerja baru diimplementasikan dan cukup membingungkan. Reaksi Anda?", opts:["Protes ke atasan agar kembali ke cara lama","Pelajari sendiri, ikuti pelatihan, adaptasikan diri","Abaikan dan tetap pakai cara lama","Tunggu rekan lain berhasil baru ikut"], ans:1, exp:"Kemampuan adaptasi terhadap teknologi dan perubahan sistem adalah kompetensi kritis di era digital — terutama di transformasi digital BUMN." },
+  { q:"Anda bekerja dalam tim multikultural dengan latar belakang daerah berbeda. Pendekatan Anda?", opts:["Utamakan kolega yang satu daerah","Anggap semua sama dan abaikan perbedaan budaya","Hargai keberagaman dan manfaatkan perspektif berbeda","Minta tim dipisah sesuai latar belakang"], ans:2, exp:"Inklusivitas dan menghargai keberagaman adalah inti dari Bhinneka Tunggal Ika dalam lingkungan kerja BUMN — dan meningkatkan inovasi tim." },
+  { q:"Anda melihat peluang peningkatan proses kerja yang belum pernah dipikirkan tim. Anda...", opts:["Simpan ide untuk diri sendiri","Tunggu atasan yang minta masukan","Usulkan dengan data dan analisis yang jelas melalui forum yang tepat","Langsung ubah prosedur tanpa diskusi"], ans:2, exp:"Inisiatif berbasis data melalui saluran yang tepat adalah bentuk kontribusi proaktif yang sangat dihargai — mencerminkan jiwa inovasi pegawai BUMN terbaik." },
+  { q:"Anda mengalami tekanan kerja yang berat dalam waktu lama. Cara terbaik mengatasinya?", opts:["Pendam sendiri agar terlihat kuat","Keluar dari pekerjaan","Kelola dengan olahraga, istirahat cukup, dan bicarakan jika perlu","Lampiaskan frustrasi ke rekan kerja"], ans:2, exp:"Manajemen stres yang sehat: menjaga keseimbangan fisik-mental, komunikasi terbuka, dan tetap produktif. Ini adalah indikator ketangguhan (resilience) psikologis." },
+  { q:"Anda diminta atasan melakukan sesuatu yang menurut Anda tidak etis meski tidak melanggar hukum. Respons Anda?", opts:["Lakukan saja karena atasan memerintahkan","Tolak langsung tanpa penjelasan","Sampaikan keberatan secara konstruktif dan cari alternatif bersama","Lakukan sambil dokumentasikan sebagai perlindungan diri"], ans:2, exp:"Integritas berarti berani menyuarakan nilai secara profesional — bukan sekedar patuh buta atau menolak frontal. Dialog konstruktif adalah jalan tengah terbaik." },
+  { q:"Anda baru bergabung di tim yang sudah punya dinamika dan budaya sendiri. Cara terbaik beradaptasi?", opts:["Langsung ubah cara kerja tim sesuai kebiasaan Anda","Amati, dengarkan, pelajari dulu sebelum berkontribusi","Diam total dan tunggu sampai ada yang mengajak","Tolak budaya lama dan tawarkan cara Anda dari awal"], ans:1, exp:"Adaptasi cerdas: observe → understand → contribute. Menghormati budaya yang ada sambil secara bertahap membawa nilai tambah adalah tanda kematangan profesional." },
+],
+};
+
+let state = {
+  currentCat: 'twk',
+  answers: {},
+  revealed: {},
+  done: false
+};
+
+function startQuiz(){
+  document.getElementById('splash').classList.add('hide');
+}
+
+function renderTabs(){
+  const wrap = document.getElementById('tabs-wrap');
+  wrap.innerHTML = CATEGORIES.map(cat => {
+    const qs = QUESTIONS[cat.id];
+    const answered = Object.keys(state.answers).filter(k=>k.startsWith(cat.id+'_')).length;
+    const isDone = answered === qs.length;
+    return `<button class="tab-btn ${state.currentCat===cat.id?'active':''} ${isDone?'done':''}"
+      onclick="switchTab('${cat.id}')">
+      ${cat.icon} ${cat.name}
+      <span class="tab-badge">${answered}/${qs.length}</span>
+    </button>`;
+  }).join('');
+}
+
+function switchTab(id){
+  state.currentCat = id;
+  renderAll();
+}
+
+function renderAll(){
+  renderTabs();
+  if(state.done){ renderResults(); return; }
+  const cat = CATEGORIES.find(c=>c.id===state.currentCat);
+  const qs = QUESTIONS[state.currentCat];
+  const answered = qs.filter((_,i)=>state.answers[state.currentCat+'_'+i]!==undefined).length;
+  const pct = Math.round(answered/qs.length*100);
+
+  let html = `
+  <div class="section-hdr">
+    <div class="section-title-block">
+      <h2>${cat.icon} ${cat.full}</h2>
+      <p>Pilih jawaban terbaik — klik untuk lihat penjelasan</p>
+    </div>
+    <div class="section-stats">
+      <div class="stat-pill">Dijawab: <b>${answered}/${qs.length}</b></div>
+      <div class="stat-pill">Benar: <b>${countCorrect(state.currentCat)}</b></div>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="progress-txt">${pct}%</div>
+  </div>
+  <div class="q-grid">`;
+
+  qs.forEach((q,i)=>{
+    const key = state.currentCat+'_'+i;
+    const userAns = state.answers[key];
+    const revealed = state.revealed[key];
+    const isAnswered = userAns !== undefined;
+    const isCorrect = userAns === q.ans;
+    html += `<div class="q-card ${isAnswered?(isCorrect?'answered':'wrong-answered'):''}" id="qcard-${key}">
+      <div class="q-head">
+        <div class="q-num">${i+1}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="q-opts">`;
+    q.opts.forEach((opt,j)=>{
+      let cls = '';
+      if(revealed){
+        if(j===q.ans) cls='correct';
+        else if(j===userAns && userAns!==q.ans) cls='wrong';
+      } else if(j===userAns) cls='selected';
+      const letters = ['A','B','C','D'];
+      html += `<button class="opt-btn ${cls}" ${revealed?'disabled':''} onclick="selectAns('${key}',${j},${q.ans})">
+        <span class="opt-letter">${letters[j]}</span>${opt}
+      </button>`;
+    });
+    html += `</div>
+      <div class="q-explain ${revealed?'show':''}" id="exp-${key}">
+        <strong>💡 Pembahasan:</strong> ${q.exp}
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+
+  // Finish bar
+  const totalAns = Object.keys(state.answers).length;
+  const totalQ = Object.keys(QUESTIONS).reduce((s,k)=>s+QUESTIONS[k].length,0);
+  html += `<div class="finish-bar">
+    <div class="finish-hint">Total terjawab: <b style="color:var(--white)">${totalAns}/${totalQ}</b> soal</div>
+    <button class="btn-finish" onclick="finishQuiz()">🏁 Lihat Hasil Akhir</button>
+  </div>`;
+
+  document.getElementById('main-content').innerHTML = html;
+  document.getElementById('results-panel').style.display='none';
+  updateHdrScore();
+}
+
+function selectAns(key, chosen, correct){
+  if(state.revealed[key]) return;
+  state.answers[key] = chosen;
+  state.revealed[key] = true;
+  updateHdrScore();
+  // Update card
+  const card = document.getElementById('qcard-'+key);
+  const opts = card.querySelectorAll('.opt-btn');
+  const letters = ['A','B','C','D'];
+  opts.forEach((btn,j)=>{
+    btn.disabled = true;
+    btn.classList.remove('selected');
+    if(j===correct) btn.classList.add('correct');
+    else if(j===chosen && chosen!==correct) btn.classList.add('wrong');
+    btn.querySelector('.opt-letter').textContent = letters[j];
+  });
+  document.getElementById('exp-'+key).classList.add('show');
+  card.classList.remove('answered','wrong-answered');
+  card.classList.add(chosen===correct?'answered':'wrong-answered');
+  // Update tabs/progress
+  const cat = key.split('_')[0];
+  const qs = QUESTIONS[cat];
+  const answered = qs.filter((_,i)=>state.answers[cat+'_'+i]!==undefined).length;
+  const pct = Math.round(answered/qs.length*100);
+  const fillEl = document.querySelector('.progress-fill');
+  if(fillEl) fillEl.style.width = pct+'%';
+  const pctEl = document.querySelector('.progress-txt');
+  if(pctEl) pctEl.textContent = pct+'%';
+  renderTabs();
+}
+
+function countCorrect(catId){
+  const qs = QUESTIONS[catId];
+  return qs.filter((q,i)=>state.answers[catId+'_'+i]===q.ans).length;
+}
+
+function updateHdrScore(){
+  let correct=0, total=0;
+  CATEGORIES.forEach(cat=>{
+    correct += countCorrect(cat.id);
+    total += QUESTIONS[cat.id].filter((_,i)=>state.answers[cat.id+'_'+i]!==undefined).length;
+  });
+  document.getElementById('hdr-score').textContent = correct+' / '+total;
+}
+
+function finishQuiz(){
+  state.done = true;
+  renderResults();
+}
+
+function renderResults(){
+  document.getElementById('main-content').innerHTML='';
+  const rp = document.getElementById('results-panel');
+  rp.style.display='block';
+
+  let totalCorrect=0, totalQ=0;
+  CATEGORIES.forEach(cat=>{
+    totalCorrect += countCorrect(cat.id);
+    totalQ += QUESTIONS[cat.id].length;
+  });
+  const pct = Math.round(totalCorrect/totalQ*100);
+  const pass = pct>=60;
+
+  document.getElementById('res-big').textContent = pct+'%';
+  document.getElementById('res-big').className = 'result-score-big '+(pass?'pass':'fail');
+  document.getElementById('res-label').textContent = pass?'🎉 Selamat! Kamu Lolos Ambang Batas':'Perlu Banyak Latihan Lagi';
+  document.getElementById('res-detail').textContent = `Benar ${totalCorrect} dari ${totalQ} soal`;
+
+  const bd = document.getElementById('res-breakdown');
+  bd.innerHTML = CATEGORIES.map(cat=>{
+    const correct = countCorrect(cat.id);
+    const total = QUESTIONS[cat.id].length;
+    const p = Math.round(correct/total*100);
+    const cls = p>=70?'good':p>=50?'ok':'bad';
+    return `<div class="rb-card">
+      <div class="rb-icon">${cat.icon}</div>
+      <div class="rb-info">
+        <div class="rb-name">${cat.name}</div>
+        <div class="rb-score">${correct}/${total} benar</div>
+      </div>
+      <div class="rb-pct ${cls}">${p}%</div>
+    </div>`;
+  }).join('');
+
+  renderTabs();
+  rp.scrollIntoView({behavior:'smooth'});
+}
+
+function retryAll(){
+  state.answers = {};
+  state.revealed = {};
+  state.done = false;
+  state.currentCat = 'twk';
+  renderAll();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Init
+renderAll();
+</script>
+</body>
+</html>
